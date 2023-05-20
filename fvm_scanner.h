@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdio.h>
 #include <stddef.h>
 #include <stdbool.h>
 
@@ -11,7 +12,7 @@ typedef struct Span {
 Span span_new(const char* start, size_t length);
 Span span_from(const char* start);
 bool span_equals(Span lhs, Span rhs);
-void span_print(Span span);
+void span_print(FILE* stream, Span span);
 
 typedef enum TokenType {
   TOK_LABLE,

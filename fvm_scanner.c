@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
 
@@ -35,9 +34,9 @@ bool span_equals(Span lhs, Span rhs) {
   return true;
 }
 
-void span_print(Span span) {
+void span_print(FILE* stream, Span span) {
   for (size_t i = 0; i < span.length; i++)
-    printf("%c", span.start[i]);
+    fprintf(stream, "%c", span.start[i]);
 }
 
 Token token_new(TokenType type, Span span) {
