@@ -20,7 +20,6 @@ typedef enum TokenType {
   TOK_CHARLITERAL,
 
   TOK_COMMA,
-  TOK_SEMICOLON,
 
   TOK_PUSH,
   TOK_POP,
