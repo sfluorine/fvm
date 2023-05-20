@@ -129,9 +129,22 @@ static void eval(FVM* vm) {
     break;
   case INS_JMP:
     advance(vm);
+    vm->registers[REG_IP] = vm->registers[fetch(vm, 0)];
+    break;
+  case INS_JMPI:
+    advance(vm);
     vm->registers[REG_IP] = fetch(vm, 0);
     break;
   case INS_JE:
+    advance(vm);
+
+    if (vm->flags[FLAG_EQ]) {
+      vm->registers[REG_IP] = vm->registers[fetch(vm, 0)];
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JEI:
     advance(vm);
 
     if (vm->flags[FLAG_EQ]) {
@@ -144,12 +157,30 @@ static void eval(FVM* vm) {
     advance(vm);
 
     if (!vm->flags[FLAG_EQ]) {
+      vm->registers[REG_IP] = vm->registers[fetch(vm, 0)];
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JNEI:
+    advance(vm);
+
+    if (!vm->flags[FLAG_EQ]) {
       vm->registers[REG_IP] = fetch(vm, 0);
     } else {
       advance(vm);
     }
     break;
   case INS_JG:
+    advance(vm);
+
+    if (vm->flags[FLAG_GT]) {
+      vm->registers[REG_IP] = vm->registers[fetch(vm, 0)];
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JGI:
     advance(vm);
 
     if (vm->flags[FLAG_GT]) {
@@ -162,6 +193,15 @@ static void eval(FVM* vm) {
     advance(vm);
 
     if (vm->flags[FLAG_LT]) {
+      vm->registers[REG_IP] = vm->registers[fetch(vm, 0)];
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JLI:
+    advance(vm);
+
+    if (vm->flags[FLAG_LT]) {
       vm->registers[REG_IP] = fetch(vm, 0);
     } else {
       advance(vm);
@@ -171,12 +211,30 @@ static void eval(FVM* vm) {
     advance(vm);
 
     if (vm->flags[FLAG_GT] || vm->flags[FLAG_EQ]) {
+      vm->registers[REG_IP] = vm->registers[fetch(vm, 0)];
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JGEI:
+    advance(vm);
+
+    if (vm->flags[FLAG_GT] || vm->flags[FLAG_EQ]) {
       vm->registers[REG_IP] = fetch(vm, 0);
     } else {
       advance(vm);
     }
     break;
   case INS_JLE:
+    advance(vm);
+
+    if (vm->flags[FLAG_LT] || vm->flags[FLAG_EQ]) {
+      vm->registers[REG_IP] = vm->registers[fetch(vm, 0)];
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JLEI:
     advance(vm);
 
     if (vm->flags[FLAG_LT] || vm->flags[FLAG_EQ]) {

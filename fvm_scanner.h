@@ -22,6 +22,7 @@ typedef enum TokenType {
 
   TOK_COMMA,
 
+  TOK_HALT,
   TOK_PUSH,
   TOK_POP,
   TOK_MOV,

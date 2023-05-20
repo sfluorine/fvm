@@ -119,7 +119,9 @@ Token scanner_get_token() {
       return token_new(TOK_REG_IP, span);
     }
 
-    if (span_equals(span, span_from("push"))) {
+    if (span_equals(span, span_from("halt"))) {
+      return token_new(TOK_HALT, span);
+    } else if (span_equals(span, span_from("push"))) {
       return token_new(TOK_PUSH, span);
     } else if (span_equals(span, span_from("pop"))) {
       return token_new(TOK_POP, span);
