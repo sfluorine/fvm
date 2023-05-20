@@ -23,16 +23,16 @@ static void pop(FVM* vm) {
 }
 
 static void debug(FVM* vm) {
-  printf("REGISTERS: \n");
+  printf("REGISTERS: ");
 
   for (int i = 0; i < REG_SIZE; i++)
-    printf("[%ld]\n", vm->registers[i]);
+    printf("[%ld] ", vm->registers[i]);
+
+  printf("\n");
 }
 
 static void eval(FVM* vm) {
-  int64_t ins = fetch(vm, 0);
-
-  switch (ins) {
+  switch (fetch(vm, 0)) {
   case INS_HALT:
     vm->running = false;
     break;
@@ -112,9 +112,90 @@ static void eval(FVM* vm) {
     vm->registers[fetch(vm, 1)] = vm->registers[fetch(vm, 1)] / fetch(vm, 0);
     advance(vm);
     break;
+  case INS_CMP:
+    advance(vm);
+    advance(vm);
+    vm->flags[FLAG_EQ] = vm->registers[fetch(vm, 1)] == vm->registers[fetch(vm, 0)];
+    vm->flags[FLAG_GT] = vm->registers[fetch(vm, 1)]  > vm->registers[fetch(vm, 0)];
+    vm->flags[FLAG_LT] = vm->registers[fetch(vm, 1)]  < vm->registers[fetch(vm, 0)];
+    advance(vm);
+    break;
+  case INS_CMPI:
+    advance(vm);
+    advance(vm);
+    vm->flags[FLAG_EQ] = vm->registers[fetch(vm, 1)] == fetch(vm, 0);
+    vm->flags[FLAG_GT] = vm->registers[fetch(vm, 1)]  > fetch(vm, 0);
+    vm->flags[FLAG_LT] = vm->registers[fetch(vm, 1)]  < fetch(vm, 0);
+    advance(vm);
+    break;
+  case INS_JMP:
+    advance(vm);
+    vm->registers[REG_IP] = fetch(vm, 0);
+    break;
+  case INS_JE:
+    advance(vm);
+
+    if (vm->flags[FLAG_EQ]) {
+      vm->registers[REG_IP] = fetch(vm, 0);
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JNE:
+    advance(vm);
+
+    if (!vm->flags[FLAG_EQ]) {
+      vm->registers[REG_IP] = fetch(vm, 0);
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JG:
+    advance(vm);
+
+    if (vm->flags[FLAG_GT]) {
+      vm->registers[REG_IP] = fetch(vm, 0);
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JL:
+    advance(vm);
+
+    if (vm->flags[FLAG_LT]) {
+      vm->registers[REG_IP] = fetch(vm, 0);
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JGE:
+    advance(vm);
+
+    if (vm->flags[FLAG_GT] || vm->flags[FLAG_EQ]) {
+      vm->registers[REG_IP] = fetch(vm, 0);
+    } else {
+      advance(vm);
+    }
+    break;
+  case INS_JLE:
+    advance(vm);
+
+    if (vm->flags[FLAG_LT] || vm->flags[FLAG_EQ]) {
+      vm->registers[REG_IP] = fetch(vm, 0);
+    } else {
+      advance(vm);
+    }
+    break;
   default:
     fprintf(stderr, "ERROR: unknown instruction: %ld\n", fetch(vm, 0));
     exit(1);
+  }
+}
+
+void fvm_execute(FVM* vm) {
+  while (vm->running) {
+    eval(vm);
+    debug(vm);
   }
 }
 
@@ -128,11 +209,4 @@ void fvm_init(FVM* vm, const int64_t* instructions) {
     vm->registers[i] = 0;
 
   vm->registers[REG_SP] = -1;
-}
-
-void fvm_execute(FVM* vm) {
-  while (vm->running) {
-    eval(vm);
-    debug(vm);
-  }
 }

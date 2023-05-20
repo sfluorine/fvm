@@ -15,9 +15,10 @@ typedef enum Register {
 } Register;
 
 typedef enum Flag {
-  ZF,
-  GT,
-  LT,
+  FLAG_EQ,
+  FLAG_GT,
+  FLAG_LT,
+  FLAG_SIZE,
 } Flag;
 
 typedef enum Instruction {
@@ -35,4 +36,13 @@ typedef enum Instruction {
   INS_MULI,
   INS_DIV,
   INS_DIVI,
+  INS_CMP,
+  INS_CMPI,
+  INS_JMP,
+  INS_JE,   
+  INS_JNE,  
+  INS_JG,   
+  INS_JL,   
+  INS_JGE,  
+  INS_JLE,  
 } Instruction;
