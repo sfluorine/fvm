@@ -82,6 +82,9 @@ Token scanner_get_token() {
 
     skip_ws();
     start = g_input;
+
+    if (!current())
+      return token_new(TOK_EOF, span_new(start, 0));
   }
 
   if (isalpha(current()) || current() == '_') {
