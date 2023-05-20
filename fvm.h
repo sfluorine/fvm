@@ -13,5 +13,5 @@ typedef struct FVM {
   int64_t stack[STACK_SIZE];
 } FVM;
 
-void fvm_execute(FVM* vm);
 void fvm_init(FVM* vm, const int64_t* instructions);
+void fvm_execute(FVM* vm);

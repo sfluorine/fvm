@@ -2,4 +2,4 @@
 
 set -xe
 
-cc main.c fvm.c -o fvm
+cc main.c fvm.c fvm_scanner.c -o fvm
