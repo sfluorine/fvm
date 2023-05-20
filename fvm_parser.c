@@ -41,9 +41,10 @@ static bool is_register(TokenType type) {
   case TOK_REG_IP:
   case TOK_REG_SP:
     return true;
+  default:
+    return false;
   }
 
-  return false;
 }
 
 static int64_t from_register(TokenType type) {
@@ -75,9 +76,9 @@ static bool is_immediate(TokenType type) {
   case TOK_INTLITERAL:
   case TOK_CHARLITERAL:
     return true;
+  default:
+    return false;
   }
-
-  return false;
 }
 
 static int64_t parse_immediate(Token token) {

@@ -1,4 +1,4 @@
-factorial: ; this program is computing the factorial of 10
+factorial: ; this program calculates the factorial of 10
   mov A, 1
   mov B, 10
 
